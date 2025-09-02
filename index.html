@@ -670,133 +670,83 @@
     </div>
 
     <script>
-        function loadPhoto(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.getElementById('profileImage');
-                    const placeholder = document.getElementById('photoPlaceholder');
-                    
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                    placeholder.style.display = 'none';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
+       function loadPhoto(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.getElementById('profileImage');
+          const placeholder = document.getElementById('photoPlaceholder');
+          img.src = e.target.result;
+          img.style.display = 'block';
+          placeholder.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
 
-        function openEditModal() {
-            // Populate form with current values
-            document.getElementById('edit-name').value = document.getElementById('name').textContent;
-            document.getElementById('edit-tagline').value = document.getElementById('tagline').textContent;
-            document.getElementById('edit-mobile').value = document.getElementById('mobile').textContent;
-            document.getElementById('edit-email').value = document.getElementById('email').textContent;
-            document.getElementById('edit-address').value = document.getElementById('address').textContent;
-            document.getElementById('edit-dob').value = document.getElementById('dob').textContent;
-            document.getElementById('edit-languages').value = document.getElementById('languages').textContent;
-            document.getElementById('edit-summary').value = document.getElementById('summary').textContent.trim();
-            document.getElementById('edit-mobile-skills').value = document.getElementById('mobile-skills').textContent;
-            document.getElementById('edit-web-skills').value = document.getElementById('web-skills').textContent;
-            document.getElementById('edit-backend-skills').value = document.getElementById('backend-skills').textContent;
-            document.getElementById('edit-ai-skills').value = document.getElementById('ai-skills').textContent;
-            document.getElementById('edit-job-title').value = document.getElementById('job-title').textContent;
-            document.getElementById('edit-job-company').value = document.getElementById('job-company').textContent;
-            
-            document.getElementById('editModal').style.display = 'block';
-        }
+    function openEditModal() {
+      document.getElementById('edit-name').value = document.getElementById('name').textContent;
+      document.getElementById('edit-tagline').value = document.getElementById('tagline').textContent;
+      document.getElementById('edit-job-title').value = document.getElementById('job-title').textContent;
+      document.getElementById('edit-job-company').value = document.getElementById('job-company').textContent;
+      document.getElementById('editModal').style.display = 'block';
+    }
 
-        function closeEditModal() {
-            document.getElementById('editModal').style.display = 'none';
-        }
+    function closeEditModal() {
+      document.getElementById('editModal').style.display = 'none';
+    }
 
-        function saveChanges() {
-            // Update resume content with form values
-            document.getElementById('name').textContent = document.getElementById('edit-name').value;
-            document.getElementById('tagline').textContent = document.getElementById('edit-tagline').value;
-            document.getElementById('mobile').textContent = document.getElementById('edit-mobile').value;
-            document.getElementById('email').textContent = document.getElementById('edit-email').value;
-            document.getElementById('address').textContent = document.getElementById('edit-address').value;
-            document.getElementById('dob').textContent = document.getElementById('edit-dob').value;
-            document.getElementById('languages').textContent = document.getElementById('edit-languages').value;
-            document.getElementById('summary').textContent = document.getElementById('edit-summary').value;
-            document.getElementById('mobile-skills').textContent = document.getElementById('edit-mobile-skills').value;
-            document.getElementById('web-skills').textContent = document.getElementById('edit-web-skills').value;
-            document.getElementById('backend-skills').textContent = document.getElementById('edit-backend-skills').value;
-            document.getElementById('ai-skills').textContent = document.getElementById('edit-ai-skills').value;
-            document.getElementById('job-title').textContent = document.getElementById('edit-job-title').value;
-            document.getElementById('job-company').textContent = document.getElementById('edit-job-company').value;
-            
-            closeEditModal();
-            
-            // Show success message
-            alert('Resume updated successfully!');
-        }
+    function saveChanges() {
+      document.getElementById('name').textContent = document.getElementById('edit-name').value;
+      document.getElementById('tagline').textContent = document.getElementById('edit-tagline').value;
+      document.getElementById('job-title').textContent = document.getElementById('edit-job-title').value;
+      document.getElementById('job-company').textContent = document.getElementById('edit-job-company').value;
+      closeEditModal();
+      alert('Resume updated successfully!');
+    }
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('editModal');
-            if (event.target == modal) {
-                closeEditModal();
-            }
-        }
+    window.onclick = function(event) {
+      const modal = document.getElementById('editModal');
+      if (event.target == modal) {
+        closeEditModal();
+      }
+    }
 
-        function downloadAsDocx() {
-            // Get both pages content
-            const page1Content = document.getElementById('page1').innerHTML;
-            const page2Content = document.getElementById('page2').innerHTML;
-            
-            // Create a complete HTML document structure for Word
-            const htmlContent = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <style>
-                        body { font-family: 'Times New Roman', serif; line-height: 1.4; color: #000; margin: 0; padding: 20mm; }
-                        .name { font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 8px; }
-                        .tagline { font-size: 14px; text-align: center; font-style: italic; margin-bottom: 15px; }
-                        .contact-info { font-size: 11px; text-align: center; margin-bottom: 20px; }
-                        .section-title { font-size: 16px; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 3px; margin: 20px 0 15px 0; }
-                        .subsection-title { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
-                        .project-title { font-size: 13px; font-weight: bold; margin-bottom: 3px; }
-                        .education-degree { font-size: 13px; font-weight: bold; }
-                        .skill-category-title { font-size: 12px; font-weight: bold; margin-bottom: 5px; }
-                        p, li { font-size: 12px; line-height: 1.4; }
-                        ul { margin-left: 15px; }
-                        .page-break { page-break-before: always; }
-                        .profile-photo { float: right; width: 120px; height: 150px; border: 2px solid #000; margin-left: 20px; }
-                        .header { border-bottom: 2px solid #000; padding-bottom: 20px; margin-bottom: 30px; }
-                    </style>
-                </head>
-                <body>
-                    <div class="page1">
-                        ${page1Content}
-                    </div>
-                    <div class="page-break"></div>
-                    <div class="page2">
-                        ${page2Content}
-                    </div>
-                </body>
-                </html>
-            `;
-            
-            // Convert HTML to Word document
-            const converted = htmlDocx.asBlob(htmlContent);
-            
-            // Create download link
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(converted);
-            link.download = 'Sanjay_M_Resume.docx';
-            
-            // Trigger download
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            // Clean up
-            URL.revokeObjectURL(link.href);
-        }
+    function downloadAsDocx() {
+      const page1Content = document.getElementById('page1').innerHTML;
+      const page2Content = document.getElementById('page2').innerHTML;
+
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <style>
+            body { font-family: 'Times New Roman', serif; line-height: 1.4; color: #000; margin: 0; padding: 20mm; }
+            .name { font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 8px; }
+            .tagline { font-size: 14px; text-align: center; font-style: italic; margin-bottom: 15px; }
+            .page-break { page-break-before: always; }
+            .profile-photo { float: right; width: 120px; height: 150px; border: 2px solid #000; margin-left: 20px; }
+          </style>
+        </head>
+        <body>
+          <div class="page1">${page1Content}</div>
+          <div class="page-break"></div>
+          <div class="page2">${page2Content}</div>
+        </body>
+        </html>
+      `;
+
+      const converted = htmlDocx.asBlob(htmlContent);
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(converted);
+      link.download = 'Sanjay_M_Resume.docx';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    }
     </script>
 </body>
 </html>
