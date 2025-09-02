@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanjay M - Professional Resume</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-docx-js/0.4.1/html-docx.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.4;
+            color: #000;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .download-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #000;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .resume-content {
+            padding: 40px;
+        }
+
+        .header {
+            position: relative;
+            border-bottom: 2px solid #000;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .header-content {
+            flex: 1;
+            text-align: center;
+        }
+
+        .profile-photo {
+            width: 120px;
+            height: 150px;
+            border: 2px solid #000;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f9f9f9;
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-left: 20px;
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .name {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .tagline {
+            font-size: 14px;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .contact-info {
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 3px;
+            margin-bottom: 15px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .subsection {
+            margin-bottom: 20px;
+        }
+
+        .subsection-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .subsection-details {
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .subsection-content {
+            font-size: 12px;
+            line-height: 1.5;
+            margin-left: 0;
+        }
+
+        .project-item {
+            margin-bottom: 18px;
+            padding-bottom: 15px;
+            border-bottom: 1px dotted #ccc;
+        }
+
+        .project-item:last-child {
+            border-bottom: none;
+        }
+
+        .project-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .project-tech {
+            font-size: 11px;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .project-description {
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .skills-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .skill-category {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+
+        .skill-category-title {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .skill-content {
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .education-item {
+            margin-bottom: 15px;
+        }
+
+        .education-degree {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .education-school {
+            font-size: 12px;
+            color: #333;
+        }
+
+        .education-details {
+            font-size: 11px;
+            color: #555;
+        }
+
+        ul {
+            margin-left: 15px;
+        }
+
+        li {
+            font-size: 12px;
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+
+        .declaration {
+            margin-top: 30px;
+            border-top: 1px solid #000;
+            padding-top: 15px;
+            font-size: 11px;
+        }
+
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .signature-item {
+            text-align: left;
+        }
+
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                max-width: none;
+            }
+            .download-btn {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .download-btn {
+                position: relative;
+                margin-bottom: 20px;
+            }
+            .header {
+                flex-direction: column;
+                align-items: center;
+            }
+            .profile-photo {
+                margin-left: 0;
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="download-btn" onclick="downloadAsDocx()">Download as DOCX</button>
+    
+    <div class="container">
+        <div class="resume-content" id="resume-content">
+            <div class="header">
+                <div class="header-content">
+                    <div class="name">SANJAY M</div>
+                    <div class="tagline">Mobile App Developer | AI/ML Enthusiast | Full-Stack Developer</div>
+                    <div class="contact-info">
+                        Address: 1/177/6 Sri Venkatesha Garden, Alampalayam Road, Rasakkapalayam<br>
+                        Mobile: +91 9342613649 | Email: sanjay13649@gmail.com<br>
+                        Date of Birth: 29/08/2005 | Languages: Tamil, English, Kannada
+                    </div>
+                </div>
+                <div class="profile-photo">
+                    <input type="file" id="photoInput" accept="image/*" style="display: none;" onchange="loadPhoto(event)">
+                    <div id="photoPlaceholder" onclick="document.getElementById('photoInput').click()" style="cursor: pointer;">
+                        Click here to<br>add your<br>professional<br>photo
+                    </div>
+                    <img id="profileImage" style="display: none;">
+                </div>
+            </div>
+
+            <div class="section full-width">
+                <div class="section-title">Professional Summary</div>
+                <div class="subsection-content">
+                    Highly motivated Computer Science student specializing in AI & ML with hands-on expertise in Flutter development, Firebase integration, and AI-powered applications. Proven track record of building cross-platform mobile apps with modern UI/UX design. Currently pursuing advanced studies in Artificial Intelligence with practical experience in data annotation and computer vision systems.
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div class="section">
+                    <div class="section-title">Education</div>
+                    <div class="education-item">
+                        <div class="education-degree">B.Sc. Computer Science with AI & ML</div>
+                        <div class="education-school">NGM College of Arts and Science, Pollachi</div>
+                        <div class="education-details">2023 – 2026 | CGPA: 85.4% (4 Semesters Completed)</div>
+                    </div>
+                    <div class="education-item">
+                        <div class="education-degree">Higher Secondary Certificate (HSC)</div>
+                        <div class="education-school">Bharath Vidya Mandir HT Secondary School</div>
+                        <div class="education-details">2023 | Percentage: 60%</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Technical Skills</div>
+                    <div class="skills-grid">
+                        <div class="skill-category">
+                            <div class="skill-category-title">Mobile Development</div>
+                            <div class="skill-content">Flutter, Kotlin, Cross-platform development</div>
+                        </div>
+                        <div class="skill-category">
+                            <div class="skill-category-title">Web Technologies</div>
+                            <div class="skill-content">JavaScript ES6+, HTML5, CSS3, Responsive Design</div>
+                        </div>
+                        <div class="skill-category">
+                            <div class="skill-category-title">Backend & Database</div>
+                            <div class="skill-content">Firebase (Authentication, Realtime Database, Storage)</div>
+                        </div>
+                        <div class="skill-category">
+                            <div class="skill-category-title">AI & Tools</div>
+                            <div class="skill-content">AI/ML APIs, Gmail API, UI/UX Design, Linux</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section full-width">
+                <div class="section-title">Key Projects</div>
+                <div class="project-item">
+                    <div class="project-title">PixAI - AI-Powered Image Generation Mobile App</div>
+                    <div class="project-tech">Technologies: Flutter, Firebase, Pollinations API, Google Authentication</div>
+                    <div class="project-description">
+                        <ul>
+                            <li>Developed cross-platform mobile application converting text prompts to AI-generated images</li>
+                            <li>Implemented seamless cloud backup system with Firebase real-time database</li>
+                            <li>Designed responsive UI with smooth user experience and modern interface</li>
+                            <li><strong>Impact:</strong> Demonstrated advanced AI integration capabilities with scalable cloud architecture</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="project-item">
+                    <div class="project-title">ReplyWise - AI Gmail Productivity Assistant</div>
+                    <div class="project-tech">Technologies: Flutter, Gmail API, Firebase, AI/ML APIs</div>
+                    <div class="project-description">
+                        <ul>
+                            <li>Built privacy-focused AI assistant for automated Gmail reply generation and email summarization</li>
+                            <li>Developed secure cloud-integrated workflow with polished user interface</li>
+                            <li>Implemented real-time email processing with AI-powered content analysis</li>
+                            <li><strong>Impact:</strong> Showcased practical AI application for productivity enhancement and workflow automation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div class="section">
+                    <div class="section-title">Professional Experience</div>
+                    <div class="subsection">
+                        <div class="subsection-title">Data Annotation Intern (Current)</div>
+                        <div class="subsection-details">AI & ML Vision and Automotive Department</div>
+                        <div class="subsection-content">
+                            <ul>
+                                <li>Utilizing Linux environment for AI/ML data processing</li>
+                                <li>Specializing in automotive vision systems and ML model training</li>
+                                <li>Contributing to dataset preparation for autonomous vehicle systems</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Certifications & Activities</div>
+                    <div class="subsection-content">
+                        <ul>
+                            <li><strong>IoT for Communication</strong> - Infosys Springboard (Completed)</li>
+                            <li><strong>AI & ML Internship</strong> - Vision and Automotive (3 months, Current)</li>
+                            <li><strong>Hackathon Participation</strong> - Competitive programming environments</li>
+                            <li><strong>Fitness & Wellness</strong> - Physical and mental wellness pursuits</li>
+                            <li><strong>Continuous Learning</strong> - Emerging technologies in AI/ML</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section full-width">
+                <div class="section-title">Areas of Expertise</div>
+                <div class="two-column">
+                    <div>
+                        <ul>
+                            <li><strong>Mobile App Development:</strong> Flutter cross-platform solutions, Kotlin native development</li>
+                            <li><strong>Artificial Intelligence:</strong> ML model integration, AI-powered applications, Computer vision</li>
+                            <li><strong>Web Development:</strong> Full-stack development, responsive design, modern web technologies</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li><strong>Cloud Technologies:</strong> Firebase services, real-time applications, cloud storage</li>
+                            <li><strong>UI/UX Design:</strong> Modern interface design, user experience optimization</li>
+                            <li><strong>Professional Skills:</strong> Problem-solving, project management, team collaboration</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="declaration">
+                <strong>DECLARATION</strong><br>
+                I hereby declare that all the information provided above is true and accurate to the best of my knowledge and belief.
+                
+                <div class="signature-section">
+                    <div class="signature-item">
+                        Date: _______________
+                    </div>
+                    <div class="signature-item">
+                        Place: _______________
+                    </div>
+                    <div class="signature-item">
+                        Signature: _______________
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('profileImage');
+                    const placeholder = document.getElementById('photoPlaceholder');
+                    
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    placeholder.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function downloadAsDocx() {
+            // Get the resume content
+            const resumeContent = document.getElementById('resume-content').innerHTML;
+            
+            // Create a complete HTML document structure for Word
+            const htmlContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body { font-family: 'Times New Roman', serif; line-height: 1.4; color: #000; }
+                        .name { font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 8px; }
+                        .tagline { font-size: 14px; text-align: center; font-style: italic; margin-bottom: 15px; }
+                        .contact-info { font-size: 11px; text-align: center; margin-bottom: 20px; }
+                        .section-title { font-size: 16px; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 3px; margin: 20px 0 15px 0; }
+                        .subsection-title { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
+                        .project-title { font-size: 13px; font-weight: bold; margin-bottom: 3px; }
+                        .education-degree { font-size: 13px; font-weight: bold; }
+                        .skill-category-title { font-size: 12px; font-weight: bold; margin-bottom: 5px; }
+                        p, li { font-size: 12px; line-height: 1.4; }
+                        ul { margin-left: 15px; }
+                    </style>
+                </head>
+                <body>
+                    ${resumeContent}
+                </body>
+                </html>
+            `;
+            
+            // Convert HTML to Word document
+            const converted = htmlDocx.asBlob(htmlContent);
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(converted);
+            link.download = 'Sanjay_M_Resume.docx';
+            
+            // Trigger download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Clean up
+            URL.revokeObjectURL(link.href);
+        }
+    </script>
+</body>
+</html>
