@@ -21,17 +21,21 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 210mm;
             margin: 0 auto;
             background: #fff;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
             position: relative;
         }
 
-        .download-btn {
+        .action-buttons {
             position: fixed;
             top: 20px;
             right: 20px;
+            z-index: 1000;
+        }
+
+        .btn {
             background: #000;
             color: #fff;
             padding: 12px 24px;
@@ -40,17 +44,34 @@
             cursor: pointer;
             font-size: 14px;
             font-weight: bold;
-            z-index: 1000;
+            margin-left: 10px;
             transition: all 0.3s ease;
         }
 
-        .download-btn:hover {
+        .btn:hover {
             background: #333;
             transform: translateY(-2px);
         }
 
-        .resume-content {
-            padding: 40px;
+        .edit-btn {
+            background: #555;
+        }
+
+        .edit-btn:hover {
+            background: #777;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin-bottom: 10mm;
+            background: #fff;
+            page-break-after: always;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
         }
 
         .header {
@@ -248,6 +269,94 @@
             text-align: left;
         }
 
+        /* Edit Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 2% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .close {
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .form-textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .save-btn {
+            background: #28a745;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .save-btn:hover {
+            background: #218838;
+        }
+
         @media print {
             body {
                 background: #fff;
@@ -257,19 +366,32 @@
                 box-shadow: none;
                 max-width: none;
             }
-            .download-btn {
+            .action-buttons {
                 display: none;
+            }
+            .page {
+                margin-bottom: 0;
+                box-shadow: none;
             }
         }
 
         @media (max-width: 768px) {
+            .page {
+                width: 100%;
+                min-height: auto;
+                padding: 15px;
+            }
             .two-column {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
-            .download-btn {
+            .action-buttons {
                 position: relative;
                 margin-bottom: 20px;
+                text-align: center;
+            }
+            .btn {
+                margin: 5px;
             }
             .header {
                 flex-direction: column;
@@ -279,22 +401,29 @@
                 margin-left: 0;
                 margin-top: 15px;
             }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <button class="download-btn" onclick="downloadAsDocx()">Download as DOCX</button>
+    <div class="action-buttons">
+        <button class="btn edit-btn" onclick="openEditModal()">Edit Resume</button>
+        <button class="btn" onclick="downloadAsDocx()">Download as DOCX</button>
+    </div>
     
     <div class="container">
-        <div class="resume-content" id="resume-content">
+        <!-- PAGE 1 -->
+        <div class="page" id="page1">
             <div class="header">
                 <div class="header-content">
-                    <div class="name">SANJAY M</div>
-                    <div class="tagline">Mobile App Developer | AI/ML Enthusiast | Full-Stack Developer</div>
-                    <div class="contact-info">
-                        Address: 1/177/6 Sri Venkatesha Garden, Alampalayam Road, Rasakkapalayam<br>
-                        Mobile: +91 9342613649 | Email: sanjay13649@gmail.com<br>
-                        Date of Birth: 29/08/2005 | Languages: Tamil, English, Kannada
+                    <div class="name" id="name">SANJAY M</div>
+                    <div class="tagline" id="tagline">Mobile App Developer | AI/ML Enthusiast | Full-Stack Developer</div>
+                    <div class="contact-info" id="contact-info">
+                        Address: <span id="address">1/177/6 Sri Venkatesha Garden, Alampalayam Road, Rasakkapalayam</span><br>
+                        Mobile: <span id="mobile">+91 9342613649</span> | Email: <span id="email">sanjay13649@gmail.com</span><br>
+                        Date of Birth: <span id="dob">29/08/2005</span> | Languages: <span id="languages">Tamil, English, Kannada</span>
                     </div>
                 </div>
                 <div class="profile-photo">
@@ -308,7 +437,7 @@
 
             <div class="section full-width">
                 <div class="section-title">Professional Summary</div>
-                <div class="subsection-content">
+                <div class="subsection-content" id="summary">
                     Highly motivated Computer Science student specializing in AI & ML with hands-on expertise in Flutter development, Firebase integration, and AI-powered applications. Proven track record of building cross-platform mobile apps with modern UI/UX design. Currently pursuing advanced studies in Artificial Intelligence with practical experience in data annotation and computer vision systems.
                 </div>
             </div>
@@ -317,14 +446,14 @@
                 <div class="section">
                     <div class="section-title">Education</div>
                     <div class="education-item">
-                        <div class="education-degree">B.Sc. Computer Science with AI & ML</div>
-                        <div class="education-school">NGM College of Arts and Science, Pollachi</div>
-                        <div class="education-details">2023 – 2026 | CGPA: 85.4% (4 Semesters Completed)</div>
+                        <div class="education-degree" id="degree1">B.Sc. Computer Science with AI & ML</div>
+                        <div class="education-school" id="school1">NGM College of Arts and Science, Pollachi</div>
+                        <div class="education-details" id="education-details1">2023 – 2026 | CGPA: 85.4% (4 Semesters Completed)</div>
                     </div>
                     <div class="education-item">
-                        <div class="education-degree">Higher Secondary Certificate (HSC)</div>
-                        <div class="education-school">Bharath Vidya Mandir HT Secondary School</div>
-                        <div class="education-details">2023 | Percentage: 60%</div>
+                        <div class="education-degree" id="degree2">Higher Secondary Certificate (HSC)</div>
+                        <div class="education-school" id="school2">Bharath Vidya Mandir HT Secondary School</div>
+                        <div class="education-details" id="education-details2">2023 | Percentage: 60%</div>
                     </div>
                 </div>
 
@@ -333,19 +462,19 @@
                     <div class="skills-grid">
                         <div class="skill-category">
                             <div class="skill-category-title">Mobile Development</div>
-                            <div class="skill-content">Flutter, Kotlin, Cross-platform development</div>
+                            <div class="skill-content" id="mobile-skills">Flutter, Kotlin, Cross-platform development</div>
                         </div>
                         <div class="skill-category">
                             <div class="skill-category-title">Web Technologies</div>
-                            <div class="skill-content">JavaScript ES6+, HTML5, CSS3, Responsive Design</div>
+                            <div class="skill-content" id="web-skills">JavaScript ES6+, HTML5, CSS3, Responsive Design</div>
                         </div>
                         <div class="skill-category">
                             <div class="skill-category-title">Backend & Database</div>
-                            <div class="skill-content">Firebase (Authentication, Realtime Database, Storage)</div>
+                            <div class="skill-content" id="backend-skills">Firebase (Authentication, Realtime Database, Storage)</div>
                         </div>
                         <div class="skill-category">
                             <div class="skill-category-title">AI & Tools</div>
-                            <div class="skill-content">AI/ML APIs, Gmail API, UI/UX Design, Linux</div>
+                            <div class="skill-content" id="ai-skills">AI/ML APIs, Gmail API, UI/UX Design, Linux</div>
                         </div>
                     </div>
                 </div>
@@ -354,9 +483,9 @@
             <div class="section full-width">
                 <div class="section-title">Key Projects</div>
                 <div class="project-item">
-                    <div class="project-title">PixAI - AI-Powered Image Generation Mobile App</div>
-                    <div class="project-tech">Technologies: Flutter, Firebase, Pollinations API, Google Authentication</div>
-                    <div class="project-description">
+                    <div class="project-title" id="project1-title">PixAI - AI-Powered Image Generation Mobile App</div>
+                    <div class="project-tech" id="project1-tech">Technologies: Flutter, Firebase, Pollinations API, Google Authentication</div>
+                    <div class="project-description" id="project1-desc">
                         <ul>
                             <li>Developed cross-platform mobile application converting text prompts to AI-generated images</li>
                             <li>Implemented seamless cloud backup system with Firebase real-time database</li>
@@ -365,10 +494,16 @@
                         </ul>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- PAGE 2 -->
+        <div class="page" id="page2">
+            <div class="section full-width">
                 <div class="project-item">
-                    <div class="project-title">ReplyWise - AI Gmail Productivity Assistant</div>
-                    <div class="project-tech">Technologies: Flutter, Gmail API, Firebase, AI/ML APIs</div>
-                    <div class="project-description">
+                    <div class="project-title" id="project2-title">ReplyWise - AI Gmail Productivity Assistant</div>
+                    <div class="project-tech" id="project2-tech">Technologies: Flutter, Gmail API, Firebase, AI/ML APIs</div>
+                    <div class="project-description" id="project2-desc">
                         <ul>
                             <li>Built privacy-focused AI assistant for automated Gmail reply generation and email summarization</li>
                             <li>Developed secure cloud-integrated workflow with polished user interface</li>
@@ -383,9 +518,9 @@
                 <div class="section">
                     <div class="section-title">Professional Experience</div>
                     <div class="subsection">
-                        <div class="subsection-title">Data Annotation Intern (Current)</div>
-                        <div class="subsection-details">AI & ML Vision and Automotive Department</div>
-                        <div class="subsection-content">
+                        <div class="subsection-title" id="job-title">Data Annotation Intern (Current)</div>
+                        <div class="subsection-details" id="job-company">AI & ML Vision and Automotive Department</div>
+                        <div class="subsection-content" id="job-desc">
                             <ul>
                                 <li>Utilizing Linux environment for AI/ML data processing</li>
                                 <li>Specializing in automotive vision systems and ML model training</li>
@@ -397,7 +532,7 @@
 
                 <div class="section">
                     <div class="section-title">Certifications & Activities</div>
-                    <div class="subsection-content">
+                    <div class="subsection-content" id="certifications">
                         <ul>
                             <li><strong>IoT for Communication</strong> - Infosys Springboard (Completed)</li>
                             <li><strong>AI & ML Internship</strong> - Vision and Automotive (3 months, Current)</li>
@@ -412,14 +547,14 @@
             <div class="section full-width">
                 <div class="section-title">Areas of Expertise</div>
                 <div class="two-column">
-                    <div>
+                    <div id="expertise-left">
                         <ul>
                             <li><strong>Mobile App Development:</strong> Flutter cross-platform solutions, Kotlin native development</li>
                             <li><strong>Artificial Intelligence:</strong> ML model integration, AI-powered applications, Computer vision</li>
                             <li><strong>Web Development:</strong> Full-stack development, responsive design, modern web technologies</li>
                         </ul>
                     </div>
-                    <div>
+                    <div id="expertise-right">
                         <ul>
                             <li><strong>Cloud Technologies:</strong> Firebase services, real-time applications, cloud storage</li>
                             <li><strong>UI/UX Design:</strong> Modern interface design, user experience optimization</li>
@@ -448,6 +583,92 @@
         </div>
     </div>
 
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit Resume</h2>
+                <span class="close" onclick="closeEditModal()">&times;</span>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-input" id="edit-name">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Professional Tagline</label>
+                <input type="text" class="form-input" id="edit-tagline">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Mobile</label>
+                    <input type="text" class="form-input" id="edit-mobile">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="edit-email">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Address</label>
+                <input type="text" class="form-input" id="edit-address">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="text" class="form-input" id="edit-dob">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Languages</label>
+                    <input type="text" class="form-input" id="edit-languages">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Professional Summary</label>
+                <textarea class="form-textarea" id="edit-summary"></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Mobile Development Skills</label>
+                    <input type="text" class="form-input" id="edit-mobile-skills">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Web Technologies</label>
+                    <input type="text" class="form-input" id="edit-web-skills">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Backend & Database</label>
+                    <input type="text" class="form-input" id="edit-backend-skills">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">AI & Tools</label>
+                    <input type="text" class="form-input" id="edit-ai-skills">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Current Job Title</label>
+                <input type="text" class="form-input" id="edit-job-title">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Company/Department</label>
+                <input type="text" class="form-input" id="edit-job-company">
+            </div>
+
+            <button class="save-btn" onclick="saveChanges()">Save Changes</button>
+        </div>
+    </div>
+
     <script>
         function loadPhoto(event) {
             const file = event.target.files[0];
@@ -465,9 +686,65 @@
             }
         }
 
+        function openEditModal() {
+            // Populate form with current values
+            document.getElementById('edit-name').value = document.getElementById('name').textContent;
+            document.getElementById('edit-tagline').value = document.getElementById('tagline').textContent;
+            document.getElementById('edit-mobile').value = document.getElementById('mobile').textContent;
+            document.getElementById('edit-email').value = document.getElementById('email').textContent;
+            document.getElementById('edit-address').value = document.getElementById('address').textContent;
+            document.getElementById('edit-dob').value = document.getElementById('dob').textContent;
+            document.getElementById('edit-languages').value = document.getElementById('languages').textContent;
+            document.getElementById('edit-summary').value = document.getElementById('summary').textContent.trim();
+            document.getElementById('edit-mobile-skills').value = document.getElementById('mobile-skills').textContent;
+            document.getElementById('edit-web-skills').value = document.getElementById('web-skills').textContent;
+            document.getElementById('edit-backend-skills').value = document.getElementById('backend-skills').textContent;
+            document.getElementById('edit-ai-skills').value = document.getElementById('ai-skills').textContent;
+            document.getElementById('edit-job-title').value = document.getElementById('job-title').textContent;
+            document.getElementById('edit-job-company').value = document.getElementById('job-company').textContent;
+            
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        function saveChanges() {
+            // Update resume content with form values
+            document.getElementById('name').textContent = document.getElementById('edit-name').value;
+            document.getElementById('tagline').textContent = document.getElementById('edit-tagline').value;
+            document.getElementById('mobile').textContent = document.getElementById('edit-mobile').value;
+            document.getElementById('email').textContent = document.getElementById('edit-email').value;
+            document.getElementById('address').textContent = document.getElementById('edit-address').value;
+            document.getElementById('dob').textContent = document.getElementById('edit-dob').value;
+            document.getElementById('languages').textContent = document.getElementById('edit-languages').value;
+            document.getElementById('summary').textContent = document.getElementById('edit-summary').value;
+            document.getElementById('mobile-skills').textContent = document.getElementById('edit-mobile-skills').value;
+            document.getElementById('web-skills').textContent = document.getElementById('edit-web-skills').value;
+            document.getElementById('backend-skills').textContent = document.getElementById('edit-backend-skills').value;
+            document.getElementById('ai-skills').textContent = document.getElementById('edit-ai-skills').value;
+            document.getElementById('job-title').textContent = document.getElementById('edit-job-title').value;
+            document.getElementById('job-company').textContent = document.getElementById('edit-job-company').value;
+            
+            closeEditModal();
+            
+            // Show success message
+            alert('Resume updated successfully!');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target == modal) {
+                closeEditModal();
+            }
+        }
+
         function downloadAsDocx() {
-            // Get the resume content
-            const resumeContent = document.getElementById('resume-content').innerHTML;
+            // Get both pages content
+            const page1Content = document.getElementById('page1').innerHTML;
+            const page2Content = document.getElementById('page2').innerHTML;
             
             // Create a complete HTML document structure for Word
             const htmlContent = `
@@ -476,7 +753,7 @@
                 <head>
                     <meta charset="UTF-8">
                     <style>
-                        body { font-family: 'Times New Roman', serif; line-height: 1.4; color: #000; }
+                        body { font-family: 'Times New Roman', serif; line-height: 1.4; color: #000; margin: 0; padding: 20mm; }
                         .name { font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 8px; }
                         .tagline { font-size: 14px; text-align: center; font-style: italic; margin-bottom: 15px; }
                         .contact-info { font-size: 11px; text-align: center; margin-bottom: 20px; }
@@ -487,10 +764,19 @@
                         .skill-category-title { font-size: 12px; font-weight: bold; margin-bottom: 5px; }
                         p, li { font-size: 12px; line-height: 1.4; }
                         ul { margin-left: 15px; }
+                        .page-break { page-break-before: always; }
+                        .profile-photo { float: right; width: 120px; height: 150px; border: 2px solid #000; margin-left: 20px; }
+                        .header { border-bottom: 2px solid #000; padding-bottom: 20px; margin-bottom: 30px; }
                     </style>
                 </head>
                 <body>
-                    ${resumeContent}
+                    <div class="page1">
+                        ${page1Content}
+                    </div>
+                    <div class="page-break"></div>
+                    <div class="page2">
+                        ${page2Content}
+                    </div>
                 </body>
                 </html>
             `;
