@@ -21,7 +21,7 @@
     <input id="fps" type="number" value="10" min="1" max="60" /> FPS
     <button id="extract" class="btn">Extract Frames</button>
     <button id="clear" class="btn">Clear</button>
-    <button id="downloadZip" class="btn" disabled>Download All</button>
+    <button id="downloadZip" class="btn" disabled>Download ZIP</button>
   </div>
   <p id="status">No video loaded.</p>
   <div id="gallery" class="gallery"></div>
@@ -36,6 +36,10 @@
 
   <video id="video" crossorigin="anonymous" style="display:none"></video>
   <canvas id="canvas" style="display:none"></canvas>
+
+  <!-- JSZip + FileSaver -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
   <script>
     const fileEl = document.getElementById('file');
@@ -148,15 +152,21 @@
       updatePlayerInfo();
     }
 
-    // Download all frames without external library
-    downloadZipBtn.addEventListener('click', ()=>{
+    // ZIP download using JSZip + FileSaver
+    downloadZipBtn.addEventListener('click', async ()=>{
       if(frames.length===0) return;
-      frames.forEach((f,i)=>{
-        const a=document.createElement('a');
-        a.href=f.url;
-        a.download=f.name;
-        a.click();
-      });
+      setStatus('Preparing ZIP...');
+      const zip = new JSZip();
+      const folder = zip.folder('frames');
+      for(let i=0;i<frames.length;i++){
+        const f = frames[i];
+        const arr = await f.blob.arrayBuffer();
+        folder.file(f.name, arr);
+        setStatus(`Adding ${i+1}/${frames.length} frames to ZIP...`);
+      }
+      const content = await zip.generateAsync({type:'blob'});
+      saveAs(content, 'frames.zip');
+      setStatus('ZIP ready — download started.');
     });
 
     playBtn.addEventListener('click', ()=>{
