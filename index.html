@@ -1,795 +1,189 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sanjay M - Professional CV</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Times New Roman', serif;
-            line-height: 1.4;
-            color: #000;
-            background: #f5f5f5;
-            padding: 20px;
-        }
-
-        .layout-selector {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .selector-btn {
-            background: #fff;
-            border: 2px solid #000;
-            padding: 10px 20px;
-            margin: 0 10px;
-            cursor: pointer;
-            font-weight: bold;
-            font-family: 'Times New Roman', serif;
-        }
-
-        .selector-btn:hover {
-            background: #f0f0f0;
-        }
-
-        .selector-btn.active {
-            background: #000;
-            color: #fff;
-        }
-
-        .controls {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-
-        .control-btn {
-            background: #000;
-            color: #fff;
-            border: none;
-            padding: 12px 20px;
-            margin: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            font-family: 'Times New Roman', serif;
-        }
-
-        .control-btn:hover {
-            background: #333;
-        }
-
-        .container {
-            max-width: 210mm;
-            margin: 0 auto;
-            background: #fff;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-
-        /* Layout 1 - Traditional CV */
-        .layout1 {
-            display: block;
-        }
-
-        .page {
-            width: 210mm;
-            min-height: 297mm;
-            padding: 20mm;
-            background: #fff;
-            page-break-after: always;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .page:last-child {
-            page-break-after: auto;
-            border-bottom: none;
-        }
-
-        .header {
-            text-align: center;
-            border-bottom: 2px solid #000;
-            padding-bottom: 20px;
-            margin-bottom: 25px;
-        }
-
-        .name {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        .tagline {
-            font-size: 14px;
-            margin-bottom: 15px;
-            font-style: italic;
-        }
-
-        .contact-info {
-            font-size: 11px;
-            line-height: 1.6;
-        }
-
-        .photo-placeholder {
-            width: 120px;
-            height: 150px;
-            border: 2px solid #000;
-            float: right;
-            margin-left: 20px;
-            margin-top: -100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f9f9f9;
-            font-size: 10px;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .photo-placeholder img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .section {
-            margin-bottom: 25px;
-            clear: both;
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid #000;
-            padding-bottom: 3px;
-            margin-bottom: 15px;
-        }
-
-        .two-column {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        /* Layout 2 - Modern Simple */
-        .layout2 {
-            display: none;
-        }
-
-        .layout2 .container {
-            display: grid;
-            grid-template-rows: auto 1fr;
-        }
-
-        .layout2 .header {
-            border-bottom: 3px double #000;
-            padding-bottom: 25px;
-            margin-bottom: 30px;
-        }
-
-        .layout2 .name {
-            font-size: 32px;
-            font-weight: normal;
-            letter-spacing: 2px;
-        }
-
-        .layout2 .section-title {
-            font-size: 14px;
-            font-weight: bold;
-            border-bottom: none;
-            border-left: 4px solid #000;
-            padding-left: 10px;
-            margin-bottom: 15px;
-        }
-
-        .subsection {
-            margin-bottom: 18px;
-        }
-
-        .subsection-title {
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .subsection-details {
-            font-size: 12px;
-            font-style: italic;
-            margin-bottom: 5px;
-        }
-
-        .subsection-content {
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        .project-item {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px dotted #ccc;
-        }
-
-        .project-item:last-child {
-            border-bottom: none;
-        }
-
-        .project-title {
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 3px;
-        }
-
-        .project-tech {
-            font-size: 11px;
-            font-style: italic;
-            margin-bottom: 8px;
-        }
-
-        .project-description {
-            font-size: 12px;
-            line-height: 1.4;
-        }
-
-        .education-item {
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .education-item:last-child {
-            border-bottom: none;
-        }
-
-        .education-degree {
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        .education-school {
-            font-size: 12px;
-        }
-
-        .education-details {
-            font-size: 11px;
-        }
-
-        .skills-list {
-            font-size: 12px;
-            line-height: 1.6;
-        }
-
-        .declaration {
-            margin-top: 30px;
-            border-top: 1px solid #000;
-            padding-top: 15px;
-            font-size: 11px;
-        }
-
-        .signature-section {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-        }
-
-        ul {
-            margin-left: 20px;
-        }
-
-        li {
-            font-size: 12px;
-            margin-bottom: 5px;
-            line-height: 1.4;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-        }
-
-        .modal-content {
-            background-color: #fff;
-            margin: 2% auto;
-            padding: 30px;
-            border: 2px solid #000;
-            width: 90%;
-            max-width: 600px;
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            text-align: center;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #000;
-            padding-bottom: 15px;
-        }
-
-        .modal-title {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .close {
-            position: absolute;
-            right: 15px;
-            top: 15px;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .form-input, .form-textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #000;
-            font-family: 'Times New Roman', serif;
-            font-size: 14px;
-        }
-
-        .form-textarea {
-            height: 80px;
-            resize: vertical;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .save-btn {
-            background: #000;
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            display: block;
-            margin: 20px auto 0;
-            font-family: 'Times New Roman', serif;
-        }
-
-        .save-btn:hover {
-            background: #333;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        @media print {
-            body {
-                background: #fff;
-                padding: 0;
-            }
-            .controls, .layout-selector {
-                display: none;
-            }
-            .container {
-                box-shadow: none;
-                max-width: none;
-            }
-            .page {
-                margin: 0;
-                box-shadow: none;
-                border: none;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .page {
-                width: 100%;
-                min-height: auto;
-                padding: 15px;
-            }
-            .two-column {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            .controls {
-                position: relative;
-                text-align: center;
-                margin-bottom: 20px;
-            }
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            .photo-placeholder {
-                float: none;
-                margin: 20px auto;
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Video → Frame-by-frame Export + Flipbook</title>
+  <style>
+    body{font-family:Arial, sans-serif;background:#0f1724;color:#fff;margin:0;padding:20px}
+    h1{font-size:20px;margin-bottom:10px}
+    .btn{background:#06b6d4;color:#000;border:0;padding:8px 12px;margin:5px;cursor:pointer;border-radius:6px}
+    .thumb{width:96px;height:72px;object-fit:cover;margin:4px;border-radius:4px}
+    .gallery{display:flex;flex-wrap:wrap;max-height:300px;overflow:auto;background:#111;padding:6px;border-radius:6px}
+    #bigPreview img{max-width:100%;max-height:400px;border-radius:6px}
+    .controls{margin-bottom:10px}
+  </style>
 </head>
 <body>
-    <div class="layout-selector">
-        <button class="selector-btn active" onclick="switchLayout(1)">Traditional CV Layout</button>
-        <button class="selector-btn" onclick="switchLayout(2)">Modern Simple Layout</button>
-    </div>
+  <h1>Video → Frames + Flipbook</h1>
+  <div class="controls">
+    <input id="file" type="file" accept="video/*" />
+    <input id="fps" type="number" value="10" min="1" max="60" /> FPS
+    <button id="extract" class="btn">Extract Frames</button>
+    <button id="clear" class="btn">Clear</button>
+    <button id="downloadZip" class="btn" disabled>Download All</button>
+  </div>
+  <p id="status">No video loaded.</p>
+  <div id="gallery" class="gallery"></div>
+  <div id="bigPreview"></div>
+  <div>
+    <button id="play" class="btn" disabled>Play</button>
+    <button id="pause" class="btn" disabled>Pause</button>
+    <label>Speed:</label>
+    <input id="playFps" type="range" min="1" max="60" value="12" />
+    <span id="playerInfo">Frames: 0 • Index: 0</span>
+  </div>
 
-    <div class="controls">
-        <button class="control-btn edit-btn" onclick="openEditModal()">Edit CV</button>
-        <button class="control-btn pdf-btn" onclick="downloadPDF()">Download PDF</button>
-    </div>
+  <video id="video" crossorigin="anonymous" style="display:none"></video>
+  <canvas id="canvas" style="display:none"></canvas>
 
-    <!-- Layout 1: Traditional CV -->
-    <div class="layout1" id="layout1">
-        <div class="container">
-            <!-- PAGE 1 -->
-            <div class="page">
-                <div class="header">
-                    <div class="name" id="name1">SANJAY M</div>
-                    <div class="tagline" id="tagline1">Mobile App Developer | AI/ML Enthusiast | Full-Stack Developer</div>
-                    <div class="contact-info">
-                        Address: <span id="address1">1/177/6 Sri Venkatesha Garden, Alampalayam Road, Rasakkapalayam</span><br>
-                        Mobile: <span id="mobile1">+91 9342613649</span> | Email: <span id="email1">sanjay13649@gmail.com</span><br>
-                        Date of Birth: <span id="dob1">29/08/2005</span> | Languages: <span id="languages1">Tamil, English, Kannada</span>
-                    </div>
-                    <div class="photo-placeholder" onclick="document.getElementById('photoInput1').click()">
-                        <input type="file" id="photoInput1" accept="image/*" style="display: none;" onchange="loadPhoto(event, 'profileImg1', 'placeholder1')">
-                        <div id="placeholder1">Click here to add professional photo</div>
-                        <img id="profileImg1" style="display: none;">
-                    </div>
-                </div>
+  <script>
+    const fileEl = document.getElementById('file');
+    const fpsEl = document.getElementById('fps');
+    const extractBtn = document.getElementById('extract');
+    const gallery = document.getElementById('gallery');
+    const statusEl = document.getElementById('status');
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const clearBtn = document.getElementById('clear');
+    const downloadZipBtn = document.getElementById('downloadZip');
+    const playBtn = document.getElementById('play');
+    const pauseBtn = document.getElementById('pause');
+    const playFps = document.getElementById('playFps');
+    const bigPreview = document.getElementById('bigPreview');
+    const playerInfo = document.getElementById('playerInfo');
 
-                <div class="section">
-                    <div class="section-title">Career Objective</div>
-                    <div class="subsection-content" id="objective1">
-                        To leverage my expertise in mobile app development and AI/ML technologies to contribute to innovative projects while continuously expanding my knowledge in emerging technologies and delivering high-quality software solutions.
-                    </div>
-                </div>
+    let frames = [];
+    let extracting = false;
+    let playerTimer = null;
+    let currentIndex = 0;
 
-                <div class="two-column">
-                    <div class="section">
-                        <div class="section-title">Education</div>
-                        <div class="education-item">
-                            <div class="education-degree">B.Sc. Computer Science with AI & ML</div>
-                            <div class="education-school">NGM College of Arts and Science, Pollachi</div>
-                            <div class="education-details">2023 – 2026 | CGPA: 85.4% (4 Semesters Completed)</div>
-                        </div>
-                        <div class="education-item">
-                            <div class="education-degree">Higher Secondary Certificate (HSC)</div>
-                            <div class="education-school">Bharath Vidya Mandir HT Secondary School</div>
-                            <div class="education-details">2023 | Percentage: 60%</div>
-                        </div>
-                        <div class="education-item">
-                            <div class="education-degree">Secondary School Leaving Certificate (SSLC)</div>
-                            <div class="education-school">Bharath Vidya Mandir HT Secondary School</div>
-                            <div class="education-details">2021 | Percentage: 65%</div>
-                        </div>
-                    </div>
+    function setStatus(t){ statusEl.textContent = t; }
 
-                    <div class="section">
-                        <div class="section-title">Technical Skills</div>
-                        <div class="subsection">
-                            <div class="subsection-title">Programming Languages</div>
-                            <div class="skills-list">Dart, JavaScript, Kotlin, Python, Java</div>
-                        </div>
-                        <div class="subsection">
-                            <div class="subsection-title">Mobile Development</div>
-                            <div class="skills-list">Flutter, Cross-platform development, Android</div>
-                        </div>
-                        <div class="subsection">
-                            <div class="subsection-title">Web Technologies</div>
-                            <div class="skills-list">HTML5, CSS3, JavaScript ES6+, Responsive Design</div>
-                        </div>
-                        <div class="subsection">
-                            <div class="subsection-title">Backend & Database</div>
-                            <div class="skills-list">Firebase, RESTful APIs, Real-time Database</div>
-                        </div>
-                        <div class="subsection">
-                            <div class="subsection-title">AI & ML Tools</div>
-                            <div class="skills-list">Computer Vision, Data Annotation, ML APIs</div>
-                        </div>
-                        <div class="subsection">
-                            <div class="subsection-title">Development Tools</div>
-                            <div class="skills-list">Git, Linux, Android Studio, VS Code</div>
-                        </div>
-                    </div>
-                </div>
+    fileEl.addEventListener('change', async (e)=>{
+      const f = e.target.files[0];
+      if(!f) return;
+      const url = URL.createObjectURL(f);
+      video.src = url;
+      await video.load();
+      video.addEventListener('loadedmetadata', ()=>{
+        setStatus(`Duration: ${video.duration.toFixed(2)}s • ${video.videoWidth}×${video.videoHeight}`);
+      }, {once:true});
+    });
 
-                <div class="section">
-                    <div class="section-title">Key Projects</div>
-                    <div class="project-item">
-                        <div class="project-title">PixAI - AI-Powered Image Generation Mobile Application</div>
-                        <div class="project-tech">Technologies Used: Flutter, Firebase, Pollinations API, Google Authentication</div>
-                        <div class="project-description">
-                            <ul>
-                                <li>Developed a comprehensive cross-platform mobile application that converts text prompts into AI-generated images</li>
-                                <li>Implemented seamless cloud backup system using Firebase real-time database for user data persistence</li>
-                                <li>Designed responsive and intuitive user interface with smooth user experience</li>
-                                <li>Integrated Google Authentication for secure user management</li>
-                                <li>Demonstrated advanced AI integration capabilities with scalable cloud architecture</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    clearBtn.addEventListener('click', ()=>{
+      frames.forEach(fr=>URL.revokeObjectURL(fr.url));
+      frames = [];
+      gallery.innerHTML = '';
+      bigPreview.innerHTML = '';
+      downloadZipBtn.disabled = true;
+      playBtn.disabled = true;
+      pauseBtn.disabled = true;
+      updatePlayerInfo();
+    });
 
-            <!-- PAGE 2 -->
-            <div class="page">
-                <div class="section">
-                    <div class="section-title">Key Projects (Continued)</div>
-                    <div class="project-item">
-                        <div class="project-title">ReplyWise - AI Gmail Productivity Assistant</div>
-                        <div class="project-tech">Technologies Used: Flutter, Gmail API, Firebase, AI/ML APIs</div>
-                        <div class="project-description">
-                            <ul>
-                                <li>Built privacy-focused AI assistant for automated Gmail reply generation and email summarization</li>
-                                <li>Developed secure cloud-integrated workflow with polished user interface</li>
-                                <li>Implemented real-time email processing with AI-powered content analysis</li>
-                                <li>Created efficient email management system with intelligent categorization</li>
-                                <li>Showcased practical AI application for productivity enhancement and workflow automation</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+    extractBtn.addEventListener('click', async ()=>{
+      if(!video.src){ setStatus('Please load a video first.'); return; }
+      if(extracting) return;
+      frames = [];
+      gallery.innerHTML = '';
+      extracting = true;
+      extractBtn.disabled = true;
+      const fps = Number(fpsEl.value) || 10;
+      const duration = video.duration;
+      const step = 1 / fps;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      let count = 0;
+      for(let t=0; t<duration; t+=step){
+        await seekVideoTo(t);
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        await saveCanvasBlob(count);
+        count++;
+        setStatus(`Extracted ${count} frames`);
+        await new Promise(r=>setTimeout(r,0));
+      }
+      setStatus(`Done — ${frames.length} frames extracted`);
+      downloadZipBtn.disabled = false;
+      playBtn.disabled = false;
+      pauseBtn.disabled = false;
+      extracting = false;
+      extractBtn.disabled = false;
+    });
 
-                <div class="two-column">
-                    <div class="section">
-                        <div class="section-title">Professional Experience</div>
-                        <div class="subsection">
-                            <div class="subsection-title">Data Annotation Intern (Current)</div>
-                            <div class="subsection-details">AI & ML Vision and Automotive Department</div>
-                            <div class="subsection-content">
-                                <ul>
-                                    <li>Utilizing Linux environment for AI/ML data processing and analysis</li>
-                                    <li>Specializing in automotive vision systems and machine learning model training</li>
-                                    <li>Contributing to dataset preparation for autonomous vehicle systems</li>
-                                    <li>Working with computer vision algorithms for object detection and recognition</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+    function seekVideoTo(time){
+      return new Promise((resolve)=>{
+        function onSeeked(){
+          video.removeEventListener('seeked', onSeeked);
+          resolve();
+        }
+        video.addEventListener('seeked', onSeeked);
+        video.currentTime = Math.min(time, video.duration);
+      });
+    }
 
-                    <div class="section">
-                        <div class="section-title">Certifications & Activities</div>
-                        <div class="subsection-content">
-                            <ul>
-                                <li><strong>IoT for Communication</strong> - Infosys Springboard (Successfully Completed)</li>
-                                <li><strong>AI & ML Internship</strong> - Vision and Automotive Department (3 months, Ongoing)</li>
-                                <li><strong>Hackathon Participation</strong> - Active participation in competitive programming environments</li>
-                                <li><strong>Continuous Learning</strong> - Staying updated with emerging technologies in AI/ML and mobile development</li>
-                                <li><strong>Open Source Contributions</strong> - Contributing to community projects and learning platforms</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+    async function saveCanvasBlob(index){
+      return new Promise((resolve)=>{
+        canvas.toBlob((blob)=>{
+          const url = URL.createObjectURL(blob);
+          frames.push({blob,url,name:`frame_${String(index).padStart(5,'0')}.png`});
+          const img=document.createElement('img');
+          img.src=url;img.className='thumb';img.title=`Frame ${index}`;
+          img.onclick=()=>showFrame(index);
+          gallery.appendChild(img);
+          if(frames.length===1) showFrame(0);
+          resolve();
+        },'image/png');
+      });
+    }
 
-                <div class="section">
-                    <div class="section-title">Areas of Expertise</div>
-                    <div class="two-column">
-                        <div>
-                            <ul>
-                                <li><strong>Mobile Application Development:</strong> Cross-platform solutions using Flutter framework</li>
-                                <li><strong>Artificial Intelligence Integration:</strong> Implementing AI/ML models in practical applications</li>
-                                <li><strong>Full-Stack Development:</strong> End-to-end application development with modern technologies</li>
-                                <li><strong>Database Management:</strong> Firebase real-time database and cloud storage solutions</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <ul>
-                                <li><strong>API Integration:</strong> RESTful services and third-party API implementations</li>
-                                <li><strong>User Interface Design:</strong> Modern UI/UX design principles and responsive layouts</li>
-                                <li><strong>Version Control:</strong> Git workflow and collaborative development practices</li>
-                                <li><strong>Problem Solving:</strong> Analytical thinking and efficient solution development</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+    function showFrame(i){
+      if(!frames[i]) return;
+      currentIndex=i;
+      bigPreview.innerHTML='';
+      const im=document.createElement('img');
+      im.src=frames[i].url;
+      bigPreview.appendChild(im);
+      updatePlayerInfo();
+    }
 
-                <div class="declaration">
-                    <strong>DECLARATION</strong><br><br>
-                    I hereby declare that all the information provided above is true and accurate to the best of my knowledge and belief. I understand that any false information may lead to the rejection of my application or termination of employment.
-                    
-                    <div class="signature-section">
-                        <div>Date: _______________</div>
-                        <div>Place: _______________</div>
-                        <div>Signature: _______________</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    // Download all frames without external library
+    downloadZipBtn.addEventListener('click', ()=>{
+      if(frames.length===0) return;
+      frames.forEach((f,i)=>{
+        const a=document.createElement('a');
+        a.href=f.url;
+        a.download=f.name;
+        a.click();
+      });
+    });
 
-    <!-- Layout 2: Modern Simple -->
-    <div class="layout2" id="layout2">
-        <div class="container">
-            <!-- PAGE 1 -->
-            <div class="page">
-                <div class="header">
-                    <div class="name" id="name2">SANJAY M</div>
-                    <div class="tagline" id="tagline2">Mobile App Developer | AI/ML Enthusiast | Full-Stack Developer</div>
-                    <div class="contact-info">
-                        <strong>Address:</strong> <span id="address2">1/177/6 Sri Venkatesha Garden, Alampalayam Road, Rasakkapalayam</span><br>
-                        <strong>Mobile:</strong> <span id="mobile2">+91 9342613649</span> | <strong>Email:</strong> <span id="email2">sanjay13649@gmail.com</span><br>
-                        <strong>Date of Birth:</strong> <span id="dob2">29/08/2005</span> | <strong>Languages:</strong> <span id="languages2">Tamil, English, Kannada</span>
-                    </div>
-                    <div class="photo-placeholder" onclick="document.getElementById('photoInput2').click()">
-                        <input type="file" id="photoInput2" accept="image/*" style="display: none;" onchange="loadPhoto(event, 'profileImg2', 'placeholder2')">
-                        <div id="placeholder2">Professional Photo</div>
-                        <img id="profileImg2" style="display: none;">
-                    </div>
-                </div>
+    playBtn.addEventListener('click', ()=>{
+      if(frames.length===0) return;
+      const fps=Number(playFps.value)||12;
+      const interval=1000/fps;
+      if(playerTimer) clearInterval(playerTimer);
+      playerTimer=setInterval(()=>{
+        showFrame((currentIndex+1)%frames.length);
+      },interval);
+    });
+    pauseBtn.addEventListener('click', ()=>{
+      if(playerTimer) clearInterval(playerTimer);
+      playerTimer=null;
+    });
+    playFps.addEventListener('input', ()=>{
+      if(playerTimer){clearInterval(playerTimer);
+        const fps=Number(playFps.value)||12;
+        playerTimer=setInterval(()=>{
+          showFrame((currentIndex+1)%frames.length);
+        },1000/fps);
+      }
+    });
 
-                <div class="section">
-                    <div class="section-title">Professional Summary</div>
-                    <div class="subsection-content" id="summary2">
-                        Dedicated Computer Science student with specialized focus on Artificial Intelligence and Machine Learning. Experienced in developing cross-platform mobile applications using Flutter framework with Firebase backend integration. Passionate about creating innovative AI-powered solutions and contributing to cutting-edge technology projects.
-                    </div>
-                </div>
-
-                <div class="section">
-                    <div class="section-title">Academic Qualifications</div>
-                    <div class="education-item">
-                        <div class="education-degree">Bachelor of Science - Computer Science with Artificial Intelligence & Machine Learning</div>
-                        <div class="education-school">NGM College of Arts and Science, Pollachi, Tamil Nadu</div>
-                        <div class="education-details">Duration: 2023 – 2026 | Current CGPA: 85.4% (Based on 4 Semesters Completed)</div>
-                    </div>
-                    <div class="education-item">
-                        <div class="education-degree">Higher Secondary Certificate (HSC) - Computer Science</div>
-                        <div class="education-school">Bharath Vidya Mandir Higher Secondary School</div>
-                        <div class="education-details">Year of Completion: 2023 | Percentage: 60%</div>
-                    </div>
-                    <div class="education-item">
-                        <div class="education-degree">Secondary School Leaving Certificate (SSLC)</div>
-                        <div class="education-school">Bharath Vidya Mandir Higher Secondary School</div>
-                        <div class="education-details">Year of Completion: 2021 | Percentage: 65%</div>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <div class="section-title">Core Competencies</div>
-                    <div class="two-column">
-                        <div>
-                            <div class="subsection">
-                                <div class="subsection-title">Mobile Development</div>
-                                <div class="skills-list">Flutter Framework, Dart Programming, Cross-platform Development, Android Development, Kotlin</div>
-                            </div>
-                            <div class="subsection">
-                                <div class="subsection-title">Web Technologies</div>
-                                <div class="skills-list">JavaScript ES6+, HTML5, CSS3, Responsive Web Design, Frontend Development</div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="subsection">
-                                <div class="subsection-title">Backend & Cloud</div>
-                                <div class="skills-list">Firebase Services, Real-time Database, Cloud Storage, Authentication Systems</div>
-                            </div>
-                            <div class="subsection">
-                                <div class="subsection-title">AI & Machine Learning</div>
-                                <div class="skills-list">Computer Vision, Data Annotation, ML Model Integration, AI APIs</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PAGE 2 -->
-            <div class="page">
-                <div class="section">
-                    <div class="section-title">Project Portfolio</div>
-                    <div class="project-item">
-                        <div class="project-title">PixAI - Artificial Intelligence Image Generation Platform</div>
-                        <div class="project-tech">Development Stack: Flutter, Firebase Real-time Database, Pollinations API, Google Authentication</div>
-                        <div class="project-description">
-                            <ul>
-                                <li>Engineered a sophisticated cross-platform mobile application capable of generating high-quality images from textual descriptions</li>
-                                <li>Architected robust cloud backup infrastructure utilizing Firebase real-time database for seamless data synchronization</li>
-                                <li>Designed and implemented intuitive user interface following modern UI/UX principles</li>
-                                <li>Integrated secure authentication system using Google OAuth for enhanced user security</li>
-                                <li>Optimized application performance for smooth user experience across different device specifications</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="project-item">
-                        <div class="project-title">ReplyWise - Intelligent Email Management System</div>
-                        <div class="project-tech">Technology Framework: Flutter, Gmail API, Firebase Backend, Artificial Intelligence APIs</div>
-                        <div class="project-description">
-                            <ul>
-                                <li>Developed comprehensive AI-powered email management solution with automated response generation capabilities</li>
-                                <li>Implemented advanced email summarization features using natural language processing techniques</li>
-                                <li>Created secure and privacy-focused architecture ensuring user data protection</li>
-                                <li>Designed intuitive workflow management system for enhanced productivity</li>
-                                <li>Demonstrated practical application of AI technologies in real-world productivity scenarios</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="two-column">
-                    <div class="section">
-                        <div class="section-title">Professional Experience</div>
-                        <div class="subsection">
-                            <div class="subsection-title">Data Annotation Intern</div>
-                            <div class="subsection-details">AI & ML Vision and Automotive Department | Current Position</div>
-                            <div class="subsection-content">
-                                <ul>
-                                    <li>Executing data annotation tasks for automotive vision systems in Linux environments</li>
-                                    <li>Contributing to machine learning model training datasets for autonomous vehicle applications</li>
-                                    <li>Collaborating with development teams on computer vision algorithm improvements</li>
-                                    <li>Maintaining high-quality standards in data processing and annotation workflows</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="section">
-                        <div class="section-title">Achievements & Certifications</div>
-                        <div class="subsection-content">
-                            <ul>
-                                <li><strong>IoT for Communication Certification</strong> - Infosys Springboard Platform (Successfully Completed)</li>
-                                <li><strong>Current AI & ML Internship</strong> - 3 months ongoing program in Vision and Automotive systems</li>
-                                <li><strong>Academic Excellence</strong> - Consistent high performance with 85.4% CGPA</li>
-                                <li><strong>Hackathon Participation</strong> - Active involvement in competitive programming and development challenges</li>
-                                <li><strong>Continuous Professional Development</strong> - Regular engagement with latest technologies and industry trends</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <div class="section-title">Personal Information</div>
-                    <div class="two-column">
-                        <div>
-                            <ul>
-                                <li><strong>Father's Name:</strong> Murugan</li>
-                                <li><strong>Mother's Name:</strong> Shanthi</li>
-                                <li><strong>Nationality:</strong> Indian</li>
-                                <li><strong>Marital Status:</strong> Single</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <ul>
-                                <li><strong>Hobbies:</strong> Technology Research, Fitness, Reading</li>
-                                <li><strong>Interests:</strong> AI/ML Innovations, Mobile App Trends</li>
-                                <li><strong>Strengths:</strong> Problem-solving, Team collaboration, Quick learning</li>
-                                <li><strong>Career Goals:</strong> AI/ML Specialist, Senior Developer</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="declaration">
-                    <strong>DECLARATION</strong><br><br>
-                    I hereby declare that all the information furnished above is true to the best of my knowledge and belief. I bear the responsibility for the correctness of the above-mentioned particulars.
-                    
-                    <div class="signature-section">
-                        <div>Date: _______________</div>
-                        <div>Place: _______________</div>
-                        <div>(Sanjay M)<br>Signature</div>
-                    </div>
-                </div>
-            </div
+    function updatePlayerInfo(){
+      playerInfo.textContent=`Frames: ${frames.length} • Index: ${currentIndex}`;
+    }
+  </script>
+</body>
+</html>
